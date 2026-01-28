@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script defer src="app.js"></script>
+  <title>Document</title>
+</head>
+
+<body>
+
+  <div class="container">
+    <div class="group">
+      <label for="firstName">First Name</label> <br>
+      <input type="text" id="firstName">
+    </div>
+    <div class="group">
+      <label for="secondName">Second Name</label><br>
+      <input type="text" id="secondName">
+    </div>
+    <div class="group">
+      <label for="money">Money</label><br>
+      <input type="number" id="money">
+    </div>
+    <div>
+      <br><br>
+      <div class="group">
+        <label for="login-name">Login Name</label><br>
+        <input type="text" id="login-name">
+      </div>
+      <div class="group">
+        <label for="password">Password</label><br>
+        <input type="password" id="password">
+      </div>
+    </div>
+    <button type="submit" id="input-Info" onclick="inputInfo()">Input Info</button>
+    <button type="submit" id="confirm-user" onclick="confirmUserInfo()">Confirm user</button>
+    <button type="submit" id="confirm-user" onclick="deleteUserInfo()">Delete user</button>
+  </div>
+
+  <div class="container">
+    <h1 id="printedAmount"></h1>
+    <input type="number" id="input">
+    <button type="submit" id="check-account-money" onclick="checkMoney()">Check Amount Of Money</button>
+    <button type="submit" id="widthraw" onclick="widthrowMoney()">Widthraw Amount</button>
+    <button type="submit" id="deposit" onclick="depositMoney()">Deposit Amount</button>
+
+    <button type="submit" id="check-stored" onclick="checkStored()">Check</button>
+  </div>
+
+</body>
+
+</html>
