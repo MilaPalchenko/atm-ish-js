@@ -19,6 +19,13 @@ class User {
 
 let userInfo;
 let userLoginInfo = false;
+//repeated text prints
+class Messages { 
+  depositMsg = `You deposited ${input.value} (amount)`;
+  widthrawMsg = `You widthrew ${input.value} (amount)`;
+  emptyInputMsg = "Your input is empty";
+  loginFirstMsg = "Login first"
+}
 
 function inputInfo() {
   userInfo = new User({
@@ -50,45 +57,45 @@ function checkMoney() {
   if (userLoginInfo) {
     printedAmount.textContent = `Hello ${check.firstName}. You currently have ${check.money} money.`;
   } else {
-    printedAmount.textContent = `Login first`;
+    printedAmount.textContent = Messages.loginFirstMsg;
   }
 }
 
 function depositMoney() {
-  let check = JSON.parse(localStorage.getItem("storedUser"));
+  let storedUserInfo = JSON.parse(localStorage.getItem("storedUser"));
   if (userLoginInfo) {
     if (input.value <= 0) {
-      printedAmount.textContent = `Your input is empty`
+      printedAmount.textContent = Messages.emptyInputMsg;
     } else {
-      check.money += Number(input.value);
-      printedAmount.textContent = `You deposited ${input.value} (amount)`;
+      storedUserInfo.money += Number(input.value);
+      printedAmount.textContent = Messages.depositMsg;
       
-      const updatedMoney = JSON.stringify(check);
+      const updatedMoney = JSON.stringify(storedUserInfo);
       localStorage.setItem("storedUser", updatedMoney);
     }
   } else {
-    printedAmount.textContent = `Login first`;
+    printedAmount.textContent = Messages.loginFirstMsg;
   }
 }
 
 function widthrowMoney() {
-  let check = JSON.parse(localStorage.getItem("storedUser"));
+  let storedUserMoney = JSON.parse(localStorage.getItem("storedUser"));
   if (userLoginInfo) {
     if (input.value <= 0) {
-      printedAmount.textContent = `Your input is empty`
+      printedAmount.textContent = Messages.emptyInputMsg;
     } else {
-      if (check.money < input.value) {
+      if (storedUserMoney.money < input.value) {
         printedAmount.textContent = `You don't have enough funds to do that`;
       } else {
-        check.money -= Number(input.value);
-        printedAmount.textContent = `You widthrew ${input.value} (amount)`;
+        storedUserMoney.money -= Number(input.value);
+        printedAmount.textContent = Messages.widthrawMsg;
 
-        const updatedMoney = JSON.stringify(check);
+        const updatedMoney = JSON.stringify(storedUserMoney);
         localStorage.setItem("storedUser", updatedMoney);
       }
     }
   } else {
-    printedAmount.textContent = `Login first`;
+    printedAmount.textContent = Messages.loginFirstMsg;
   }
 }
 
