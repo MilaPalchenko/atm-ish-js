@@ -7,73 +7,79 @@ let loginInput = document.getElementById("login-name");
 let passwordInput = document.getElementById("password");
 let confirmUser = document.getElementById("confirm-user");
 
-class User {
-  constructor(option) {
-    this.firstName = option.firstName;
-    this.secondName = option.secondName;
-    this.money = option.money;
-    this.login = option.login;
-    this.password = option.password;
-  }
-}
+// class User {
+//   constructor(option) {
+//     this.firstName = option.firstName;
+//     this.secondName = option.secondName;
+//     this.money = option.money;
+//     this.login = option.login;
+//     this.password = option.password;
+//   }
+// }
 
 let userInfo;
 let userLoginInfo = false;
 //repeated text prints
 let messages = {
-  depositMsg:`You deposited ${input.value} (amount)`,
-  widthrawMsg: `You widthrew ${input.value} (amount)`,
   emptyInputMsg: "Your input is empty",
   loginFirstMsg: "Login first"
-} 
-
-
-function fun() { 
-  let x, y;
-  for (let i = 0; i < 10; i++) { 
-    for(let j = 0; j < 5; j++ ){ 
-    
-      x = "hello";
-    }
-    for(let k = 0; k < 5; k++) { 
-       
-      y = "you"
-    }
-  }
-  console.log(x + y);
 }
-fun();
+let storedMultiple = ([]);
+
+  function formatName(name) {
+    let input = name.value;
+    let firstUpperCased;
+    let processedLowerLetter;
+    let sumLowerLetters = "";
+
+    firstUpperCased = input.charAt(0).toUpperCase();
+    for (let i = 1; i <= input.length; i++) {
+      processedLowerLetter = input.charAt(i).toLowerCase();
+      sumLowerLetters += processedLowerLetter;
+    }
+    return firstUpperCased + sumLowerLetters;
+  }
 
 function inputInfo() {
-  let input = firstNameInput.value;
-  let lowerCase = input; 
-  let upperCase; 
-  let sum = "";
-  upperCase = input.charAt(0).toUpperCase(); 
-    for (let i = 1; i <= input.length; i++) {
-      console.log(lowerCase);
-      lowerCase = input.charAt(i).toLowerCase();
-        sum += lowerCase;
-    
-    }
-  console.log(upperCase+sum);
 
-  userInfo = new User({
-    firstName: firstNameInput.value,
-    secondName: secondNameInput.value,
+  let formattedFirstName = formatName(firstNameInput);
+  let formattedSecondName = formatName(secondNameInput);
+
+  userInfo = { 
+    id: Date.now(),
+    firstName: formattedFirstName,
+    secondName: formattedSecondName,
     login: loginInput.value,
     password: passwordInput.value,
     money: Number(moneyInput.value),
-  });
-  localStorage.setItem("storedUser", JSON.stringify(userInfo));
+  }
+
+  // userInfo = new User({
+  //   firstName: formattedFirstName,
+  //   secondName: formattedSecondName,
+  //   login: loginInput.value,
+  //   password: passwordInput.value,
+  //   money: Number(moneyInput.value),
+  // });
+
+  const current = parsedUsers();
+  current.push(userInfo)
+  updatedLocalStorage(current);
 }
 
-function parsedUsers(){ 
+function updatedLocalStorage(value) { 
+  localStorage.setItem("storedUser", JSON.stringify(value));
+}
+
+function parsedUsers() {
   return JSON.parse(localStorage.getItem("storedUser"));
 }
 
 function checkStored() {
-  parsedUsers();
+  // TODO: figure out how to dig into the [n] part to pull specific user
+  let test = parsedUsers();
+  console.log(test[0].id);
+
   console.log(parsedUsers());
 }
 
@@ -102,8 +108,8 @@ function depositMoney() {
       printedAmount.textContent = messages.emptyInputMsg;
     } else {
       storedUserInfo.money += Number(input.value);
-      printedAmount.textContent = messages.depositMsg;
-      
+      printedAmount.textContent = `You deposited ${input.value} (amount)`;
+
       const updatedMoney = JSON.stringify(storedUserInfo);
       localStorage.setItem("storedUser", updatedMoney);
     }
@@ -122,7 +128,7 @@ function widthrowMoney() {
         printedAmount.textContent = `You don't have enough funds to do that`;
       } else {
         storedUserMoney.money -= Number(input.value);
-        printedAmount.textContent = messages.widthrawMsg;
+        printedAmount.textContent = `You widthrew ${input.value} (amount)`;
 
         const updatedMoney = JSON.stringify(storedUserMoney);
         localStorage.setItem("storedUser", updatedMoney);
