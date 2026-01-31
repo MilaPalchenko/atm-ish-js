@@ -20,14 +20,44 @@ class User {
 let userInfo;
 let userLoginInfo = false;
 //repeated text prints
-class Messages { 
-  depositMsg = `You deposited ${input.value} (amount)`;
-  widthrawMsg = `You widthrew ${input.value} (amount)`;
-  emptyInputMsg = "Your input is empty";
-  loginFirstMsg = "Login first"
+let messages = {
+  depositMsg:`You deposited ${input.value} (amount)`,
+  widthrawMsg: `You widthrew ${input.value} (amount)`,
+  emptyInputMsg: "Your input is empty",
+  loginFirstMsg: "Login first"
+} 
+
+
+function fun() { 
+  let x, y;
+  for (let i = 0; i < 10; i++) { 
+    for(let j = 0; j < 5; j++ ){ 
+    
+      x = "hello";
+    }
+    for(let k = 0; k < 5; k++) { 
+       
+      y = "you"
+    }
+  }
+  console.log(x + y);
 }
+fun();
 
 function inputInfo() {
+  let input = firstNameInput.value;
+  let lowerCase = input; 
+  let upperCase; 
+  let sum = "";
+  upperCase = input.charAt(0).toUpperCase(); 
+    for (let i = 1; i <= input.length; i++) {
+      console.log(lowerCase);
+      lowerCase = input.charAt(i).toLowerCase();
+        sum += lowerCase;
+    
+    }
+  console.log(upperCase+sum);
+
   userInfo = new User({
     firstName: firstNameInput.value,
     secondName: secondNameInput.value,
@@ -38,13 +68,17 @@ function inputInfo() {
   localStorage.setItem("storedUser", JSON.stringify(userInfo));
 }
 
+function parsedUsers(){ 
+  return JSON.parse(localStorage.getItem("storedUser"));
+}
+
 function checkStored() {
-  let check = JSON.parse(localStorage.getItem("storedUser"));
-  console.log(check);
+  parsedUsers();
+  console.log(parsedUsers());
 }
 
 function confirmUserInfo() {
-  let check = JSON.parse(localStorage.getItem("storedUser"));
+  let check = parsedUsers();
   if (check.login == loginInput.value &&
     check.password == passwordInput.value) {
     printedAmount.textContent = `Hello ${check.firstName}.`;
@@ -53,49 +87,49 @@ function confirmUserInfo() {
 }
 
 function checkMoney() {
-  let check = JSON.parse(localStorage.getItem("storedUser"));
+  let check = parsedUsers();
   if (userLoginInfo) {
     printedAmount.textContent = `Hello ${check.firstName}. You currently have ${check.money} money.`;
   } else {
-    printedAmount.textContent = Messages.loginFirstMsg;
+    printedAmount.textContent = messages.loginFirstMsg;
   }
 }
 
 function depositMoney() {
-  let storedUserInfo = JSON.parse(localStorage.getItem("storedUser"));
+  let storedUserInfo = parsedUsers();
   if (userLoginInfo) {
     if (input.value <= 0) {
-      printedAmount.textContent = Messages.emptyInputMsg;
+      printedAmount.textContent = messages.emptyInputMsg;
     } else {
       storedUserInfo.money += Number(input.value);
-      printedAmount.textContent = Messages.depositMsg;
+      printedAmount.textContent = messages.depositMsg;
       
       const updatedMoney = JSON.stringify(storedUserInfo);
       localStorage.setItem("storedUser", updatedMoney);
     }
   } else {
-    printedAmount.textContent = Messages.loginFirstMsg;
+    printedAmount.textContent = messages.loginFirstMsg;
   }
 }
 
 function widthrowMoney() {
-  let storedUserMoney = JSON.parse(localStorage.getItem("storedUser"));
+  let storedUserMoney = parsedUsers();
   if (userLoginInfo) {
     if (input.value <= 0) {
-      printedAmount.textContent = Messages.emptyInputMsg;
+      printedAmount.textContent = messages.emptyInputMsg;
     } else {
       if (storedUserMoney.money < input.value) {
         printedAmount.textContent = `You don't have enough funds to do that`;
       } else {
         storedUserMoney.money -= Number(input.value);
-        printedAmount.textContent = Messages.widthrawMsg;
+        printedAmount.textContent = messages.widthrawMsg;
 
         const updatedMoney = JSON.stringify(storedUserMoney);
         localStorage.setItem("storedUser", updatedMoney);
       }
     }
   } else {
-    printedAmount.textContent = Messages.loginFirstMsg;
+    printedAmount.textContent = messages.loginFirstMsg;
   }
 }
 
