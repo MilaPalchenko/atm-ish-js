@@ -92,59 +92,60 @@ function confirmUserInfo() {
 
 function checkMoney() {
   let check = parsedUsers();
-  if (userLoginInfo) {
-    for (let i = 0; i <= check.length; i++) {
-      if (check[i].login == loginInput.value &&
-        check[i].password == passwordInput.value) {
+  for (let i = 0; i < check.length; i++) {
+    if (userLoginInfo) {
+      if (check[i].login == loginInput.value) {
         printedAmount.textContent = `Hello ${check[i].firstName}. You currently have ${check[i].money} money.`;
       }
-      else {
-        printedAmount.textContent = messages.loginFirstMsg;
-      }
+    } else {
+      printedAmount.textContent = messages.loginFirstMsg;
     }
   }
+
 }
 
 function depositMoney() {
   let storedUserInfo = parsedUsers();
-  if (userLoginInfo) {
-    if (input.value <= 0) {
-      printedAmount.textContent = messages.emptyInputMsg;
-    } else {
-      for (let i = 0; i < storedUserInfo.length; i++) {
+  for (let i = 0; i < storedUserInfo.length; i++) {
+    if (userLoginInfo) {
+      if (input.value <= 0) {
+        printedAmount.textContent = messages.emptyInputMsg;
+      }
+      else if (storedUserInfo[i].login == loginInput.value) {
         storedUserInfo[i].money += Number(input.value);
         printedAmount.textContent = `You deposited ${input.value} (amount)`;
 
         const updatedMoney = JSON.stringify(storedUserInfo);
         localStorage.setItem("storedUser", updatedMoney);
       }
+    } else {
+      printedAmount.textContent = messages.loginFirstMsg;
     }
-  } else {
-    printedAmount.textContent = messages.loginFirstMsg;
   }
 }
 
 function widthrowMoney() {
-  let storedUserMoney = parsedUsers();
-  if (userLoginInfo) {
-    if (input.value <= 0) {
-      printedAmount.textContent = messages.emptyInputMsg;
-    } else {
-      for (let i = 0; i < storedUserMoney.length; i++) {
-        if (storedUserMoney[i].money < input.value) {
-          printedAmount.textContent = `You don't have enough funds to do that`;
-        } else {
-          storedUserMoney[i].money -= Number(input.value);
-          printedAmount.textContent = `You widthrew ${input.value} (amount)`;
-
-          const updatedMoney = JSON.stringify(storedUserMoney);
-          localStorage.setItem("storedUser", updatedMoney);
-        }
+  let storedUserInfo = parsedUsers();
+  for (let i = 0; i < storedUserInfo.length; i++) {
+    if (userLoginInfo) {
+      if (input.value <= 0) {
+        printedAmount.textContent = messages.emptyInputMsg;
       }
+      else if (storedUserInfo[i].money < input.value 
+        && storedUserInfo[i].login == loginInput.value
+      ) {
+        printedAmount.textContent = `You don't have enough funds to do that`;
+      }
+      else if (storedUserInfo[i].login == loginInput.value) {
+        storedUserInfo[i].money -= Number(input.value);
+        printedAmount.textContent = `You widthrew ${input.value} (amount)`;
 
+        const updatedMoney = JSON.stringify(storedUserInfo);
+        localStorage.setItem("storedUser", updatedMoney);
+      }
+    } else {
+      printedAmount.textContent = messages.loginFirstMsg;
     }
-  } else {
-    printedAmount.textContent = messages.loginFirstMsg;
   }
 }
 
