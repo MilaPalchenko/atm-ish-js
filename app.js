@@ -12,7 +12,8 @@ let userLoginInfo = false;
 //repeated text prints
 let messages = {
   emptyInputMsg: "Your input is empty",
-  loginFirstMsg: "Login first"
+  loginFirstMsg: "Login first",
+  userRegistrated: "Your user is registrated."
 }
 let storedMultiple = ([]);
 
@@ -46,16 +47,23 @@ function inputInfo() {
   let current = parsedUsers();
   if (current == null) {
     current = storedMultiple;
-    current.push(userInfo);
-    updatedLocalStorage(current);
-    printedAmount.textContent = `You user is registrated`;
+    userToLocal(current);
   } else {
-    current = parsedUsers();
-    current.push(userInfo);
-    updatedLocalStorage(current);
-    printedAmount.textContent = `You user is registrated`;
+    for (let i = 0; i < current.length; i++) {
+      if (current[i].login == loginInput.value) {
+        printedAmount.textContent = "User with this login already exists";
+      }
+      else { 
+        userToLocal(current);
+      }
+    }
   }
+}
 
+function userToLocal(value) {
+  value.push(userInfo);
+  updatedLocalStorage(value);
+  printedAmount.textContent = messages.userRegistrated;
 }
 
 function updatedLocalStorage(value) {
@@ -67,7 +75,6 @@ function parsedUsers() {
 }
 
 function checkStored() {
-  // TODO: figure out how to dig into the [n] part to pull specific user
   console.log(parsedUsers());
 }
 
@@ -80,8 +87,7 @@ function confirmUserInfo() {
       return userLoginInfo = true;
     }
     if (check[i].login !== loginInput.value ||
-      check[i].password !== passwordInput.value
-    ) {
+      check[i].password !== passwordInput.value) {
       printedAmount.textContent = `Your input or login is incorrect`;
     }
     if (loginInput.value == "" || passwordInput.value == "") {
@@ -131,9 +137,8 @@ function widthrowMoney() {
       if (input.value <= 0) {
         printedAmount.textContent = messages.emptyInputMsg;
       }
-      else if (storedUserInfo[i].money < input.value 
-        && storedUserInfo[i].login == loginInput.value
-      ) {
+      else if (storedUserInfo[i].money < input.value
+        && storedUserInfo[i].login == loginInput.value) {
         printedAmount.textContent = `You don't have enough funds to do that`;
       }
       else if (storedUserInfo[i].login == loginInput.value) {
