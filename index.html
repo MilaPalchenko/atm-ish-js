@@ -38,7 +38,15 @@
     <button type="submit" id="confirm-user" onclick="confirmUserInfo()">Confirm user</button>
     <button type="submit" id="confirm-user" onclick="deleteUserInfo()">Delete user</button>
   </div>
-
+  <br><br>
+  <div class="group">
+    <label for="transfer-to-name">Person's login</label><br>
+    <input type="text" id="transfer-to-name"> <br>
+    <label for="transfer-money">Amount of money</label><br>
+    <input type="text" id="transfer-money"> <br>
+    <button type="submit" id="transfer-money" onclick="transferMoney()">Transfer</button>
+  </div>
+  <br>
   <div class="container">
     <h1 id="printedAmount"></h1>
     <input type="number" id="input" min="0">

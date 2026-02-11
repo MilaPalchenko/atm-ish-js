@@ -6,6 +6,8 @@ let moneyInput = document.getElementById("money");
 let loginInput = document.getElementById("login-name");
 let passwordInput = document.getElementById("password");
 let confirmUser = document.getElementById("confirm-user");
+let transferLoginInput = document.getElementById("transfer-to-name");
+let transferMoneyInput = document.getElementById("transfer-money");
 
 let userInfo;
 let userLoginInfo = false;
@@ -44,19 +46,27 @@ function inputInfo() {
     password: passwordInput.value,
     money: Number(moneyInput.value),
   }
-  let current = parsedUsers();
-  if (current == null) {
+
+  let current = "";
+
+  // TODO: fix deleting issue
+  // issue with adding new user after deleting one 
+  // new user duplicates
+
+  if (firstNameInput.value == "" || secondNameInput.value == "" || moneyInput == "" ||
+    loginInput.value == "" || passwordInput.value == "") {
+    printedAmount.textContent = `One or more fields are empty`;
+  } else if (current == "") {
     current = storedMultiple;
     userToLocal(current);
   } else {
+    current = parsedUsers();
     for (let i = 0; i < current.length; i++) {
       if (current[i].login == loginInput.value) {
         printedAmount.textContent = "User with this login already exists";
-      }
-      else { 
-        userToLocal(current);
-      }
+      } 
     }
+    userToLocal(current);
   }
 }
 
@@ -98,22 +108,21 @@ function confirmUserInfo() {
 
 function checkMoney() {
   let check = parsedUsers();
-  for (let i = 0; i < check.length; i++) {
-    if (userLoginInfo) {
+  if (userLoginInfo) {
+    for (let i = 0; i < check.length; i++) {
       if (check[i].login == loginInput.value) {
         printedAmount.textContent = `Hello ${check[i].firstName}. You currently have ${check[i].money} money.`;
       }
-    } else {
-      printedAmount.textContent = messages.loginFirstMsg;
     }
+  } else {
+    printedAmount.textContent = messages.loginFirstMsg;
   }
-
 }
 
 function depositMoney() {
   let storedUserInfo = parsedUsers();
-  for (let i = 0; i < storedUserInfo.length; i++) {
-    if (userLoginInfo) {
+  if (userLoginInfo) {
+    for (let i = 0; i < storedUserInfo.length; i++) {
       if (input.value <= 0) {
         printedAmount.textContent = messages.emptyInputMsg;
       }
@@ -121,19 +130,18 @@ function depositMoney() {
         storedUserInfo[i].money += Number(input.value);
         printedAmount.textContent = `You deposited ${input.value} (amount)`;
 
-        const updatedMoney = JSON.stringify(storedUserInfo);
-        localStorage.setItem("storedUser", updatedMoney);
+        updatedLocalStorage(storedUserInfo);
       }
-    } else {
-      printedAmount.textContent = messages.loginFirstMsg;
     }
+  } else {
+    printedAmount.textContent = messages.loginFirstMsg;
   }
 }
 
 function widthrowMoney() {
   let storedUserInfo = parsedUsers();
-  for (let i = 0; i < storedUserInfo.length; i++) {
-    if (userLoginInfo) {
+  if (userLoginInfo) {
+    for (let i = 0; i < storedUserInfo.length; i++) {
       if (input.value <= 0) {
         printedAmount.textContent = messages.emptyInputMsg;
       }
@@ -145,27 +153,52 @@ function widthrowMoney() {
         storedUserInfo[i].money -= Number(input.value);
         printedAmount.textContent = `You widthrew ${input.value} (amount)`;
 
-        const updatedMoney = JSON.stringify(storedUserInfo);
-        localStorage.setItem("storedUser", updatedMoney);
+        updatedLocalStorage(storedUserInfo);
       }
-    } else {
-      printedAmount.textContent = messages.loginFirstMsg;
     }
+  } else {
+    printedAmount.textContent = messages.loginFirstMsg;
   }
 }
 
 function deleteUserInfo() {
+  // TODO: fix deleting issue
+  // issue with adding new user after deleting one
+  // new user duplicates
   let check = parsedUsers();
+  let updated;
   if (userLoginInfo) {
     for (let i = 0; i < check.length; i++) {
       if (check[i].login == loginInput.value &&
         check[i].password == passwordInput.value) {
-        const updated = check.filter(value => value !== check[i]);
+        updated = check.filter(value => value !== check[i]);
         printedAmount.textContent = `Your user ${check[i].firstName} ${check[i].secondName} is deleted.`
         updatedLocalStorage(updated);
       }
     }
   } else {
     printedAmount.textContent = messages.loginFirstMsg;
+  }
+}
+
+function transferMoney() {
+  let check = parsedUsers();
+  if (userLoginInfo) {
+    if (transferLoginInput.value <= 0 ||
+      transferMoneyInput.value <= 0) {
+      printedAmount.textContent = messages.emptyInputMsg;
+    }
+    for (let i = 0; i < check.length; i++) {
+      if (check[i].login == loginInput.value) {
+        check[i].money -= Number(transferMoneyInput.value);
+        updatedLocalStorage(check);
+      }
+    }
+    for (let i = 0; i < check.length; i++) {
+      if (check[i].login == transferLoginInput.value) {
+        check[i].money += Number(transferMoneyInput.value);
+        updatedLocalStorage(check);
+      }
+    }
   }
 }
