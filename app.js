@@ -47,26 +47,30 @@ function inputInfo() {
     money: Number(moneyInput.value),
   }
 
-  let current = "";
-
-  // TODO: fix deleting issue
-  // issue with adding new user after deleting one 
-  // new user duplicates
+  let current;
 
   if (firstNameInput.value == "" || secondNameInput.value == "" || moneyInput == "" ||
     loginInput.value == "" || passwordInput.value == "") {
     printedAmount.textContent = `One or more fields are empty`;
-  } else if (current == "") {
-    current = storedMultiple;
-    userToLocal(current);
   } else {
     current = parsedUsers();
+    if (current == null) {
+      current = storedMultiple;
+    }
     for (let i = 0; i < current.length; i++) {
       if (current[i].login == loginInput.value) {
         printedAmount.textContent = "User with this login already exists";
-      } 
+        return;
+      }
+      userToLocal(current);
     }
-    userToLocal(current);
+  }
+}
+
+function userIsntLoggedIn() {
+  if (!userLoginInfo) {
+    printedAmount.textContent = messages.loginFirstMsg;
+    return;
   }
 }
 
@@ -108,19 +112,25 @@ function confirmUserInfo() {
 
 function checkMoney() {
   let check = parsedUsers();
+  if (!userLoginInfo) {
+    printedAmount.textContent = messages.loginFirstMsg;
+    return;
+  }
   if (userLoginInfo) {
     for (let i = 0; i < check.length; i++) {
       if (check[i].login == loginInput.value) {
         printedAmount.textContent = `Hello ${check[i].firstName}. You currently have ${check[i].money} money.`;
       }
     }
-  } else {
-    printedAmount.textContent = messages.loginFirstMsg;
   }
 }
 
 function depositMoney() {
   let storedUserInfo = parsedUsers();
+  if (!userLoginInfo) {
+    printedAmount.textContent = messages.loginFirstMsg;
+    return;
+  }
   if (userLoginInfo) {
     for (let i = 0; i < storedUserInfo.length; i++) {
       if (input.value <= 0) {
@@ -133,13 +143,15 @@ function depositMoney() {
         updatedLocalStorage(storedUserInfo);
       }
     }
-  } else {
-    printedAmount.textContent = messages.loginFirstMsg;
   }
 }
 
 function widthrowMoney() {
   let storedUserInfo = parsedUsers();
+  if (!userLoginInfo) {
+    printedAmount.textContent = messages.loginFirstMsg;
+    return;
+  }
   if (userLoginInfo) {
     for (let i = 0; i < storedUserInfo.length; i++) {
       if (input.value <= 0) {
@@ -156,17 +168,16 @@ function widthrowMoney() {
         updatedLocalStorage(storedUserInfo);
       }
     }
-  } else {
-    printedAmount.textContent = messages.loginFirstMsg;
   }
 }
 
 function deleteUserInfo() {
-  // TODO: fix deleting issue
-  // issue with adding new user after deleting one
-  // new user duplicates
   let check = parsedUsers();
   let updated;
+  if (!userLoginInfo) {
+    printedAmount.textContent = messages.loginFirstMsg;
+    return;
+  }
   if (userLoginInfo) {
     for (let i = 0; i < check.length; i++) {
       if (check[i].login == loginInput.value &&
@@ -176,13 +187,15 @@ function deleteUserInfo() {
         updatedLocalStorage(updated);
       }
     }
-  } else {
-    printedAmount.textContent = messages.loginFirstMsg;
   }
 }
 
 function transferMoney() {
   let check = parsedUsers();
+  if (!userLoginInfo) {
+    printedAmount.textContent = messages.loginFirstMsg;
+    return;
+  }
   if (userLoginInfo) {
     if (transferLoginInput.value <= 0 ||
       transferMoneyInput.value <= 0) {
@@ -200,5 +213,6 @@ function transferMoney() {
         updatedLocalStorage(check);
       }
     }
+    printedAmount.textContent = "Money has been transfered";
   }
 }
