@@ -1,0 +1,28 @@
+// Flex
+@mixin d-flex { 
+    display: flex;
+}
+@mixin fd-c {
+    flex-direction: column;
+}
+@mixin fd-r { 
+    flex-direction: row;
+}
+
+// Grid
+@mixin d-grid { 
+    display: grid;
+}
+
+
+// Position content
+@mixin jc-c { 
+    justify-content: center;
+}
+@mixin jc-e { 
+    justify-content: end;
+}
+@mixin ai-c { 
+    align-items: center;
+}
+

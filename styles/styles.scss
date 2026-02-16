@@ -1,0 +1,42 @@
+@use 'mixins';
+
+* { 
+  margin: 0;
+  padding: 0;
+  font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+.container { 
+  @include mixins.d-flex;
+  @include mixins.fd-c;
+  @include mixins.ai-c;
+  @include mixins.jc-c;
+  padding: 10px;
+}
+.grouped-btns { 
+  @include mixins.d-grid;
+  grid-template-columns: repeat(2, 2fr);
+}
+.body {
+  @include mixins.d-grid;
+  grid-template-columns: repeat(2, 1fr);
+}
+.split { 
+  @include mixins.d-grid;
+  height: 100vh;
+}
+
+input { 
+  border: 1px solid;
+  border-radius: 5px;
+  padding: 5px 10px;
+  width:400px;
+}
+
+button { 
+  border: 1px solid;
+  border-radius: 5px;
+  margin: 5px;
+  padding: 5px 20px;
+}
+

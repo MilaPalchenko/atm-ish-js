@@ -8,6 +8,7 @@ let passwordInput = document.getElementById("password");
 let confirmUser = document.getElementById("confirm-user");
 let transferLoginInput = document.getElementById("transfer-to-name");
 let transferMoneyInput = document.getElementById("transfer-money");
+let changeUserName = document.getElementById("change-username");
 
 let userInfo;
 let userLoginInfo = false;
@@ -59,7 +60,7 @@ function inputInfo() {
     }
     for (let i = 0; i < current.length; i++) {
       if (current[i].login == loginInput.value) {
-        printedAmount.textContent = "User with this login already exists";
+        printedAmount.textContent = `User with this login already exists`;
         return;
       }
       userToLocal(current);
@@ -67,7 +68,24 @@ function inputInfo() {
   }
 }
 
-function userIsntLoggedIn() {
+function logout() {
+  let check = parsedUsers();
+  if (!userLoginInfo) {
+    printedAmount.textContent = messages.loginFirstMsg;
+    return;
+  }
+  if (userLoginInfo) {
+    for (let i = 0; i < check.length; i++) {
+      if (check[i].login == loginInput.value
+        && check[i].password == passwordInput.value) {
+        userLoginInfo = false;
+        printedAmount.textContent = `You've been logged out!`;
+      }
+    }
+  }
+}
+
+function ifUserIsntLoggedIn() {
   if (!userLoginInfo) {
     printedAmount.textContent = messages.loginFirstMsg;
     return;
@@ -112,10 +130,7 @@ function confirmUserInfo() {
 
 function checkMoney() {
   let check = parsedUsers();
-  if (!userLoginInfo) {
-    printedAmount.textContent = messages.loginFirstMsg;
-    return;
-  }
+  ifUserIsntLoggedIn();
   if (userLoginInfo) {
     for (let i = 0; i < check.length; i++) {
       if (check[i].login == loginInput.value) {
@@ -127,10 +142,7 @@ function checkMoney() {
 
 function depositMoney() {
   let storedUserInfo = parsedUsers();
-  if (!userLoginInfo) {
-    printedAmount.textContent = messages.loginFirstMsg;
-    return;
-  }
+  ifUserIsntLoggedIn();
   if (userLoginInfo) {
     for (let i = 0; i < storedUserInfo.length; i++) {
       if (input.value <= 0) {
@@ -148,10 +160,7 @@ function depositMoney() {
 
 function widthrowMoney() {
   let storedUserInfo = parsedUsers();
-  if (!userLoginInfo) {
-    printedAmount.textContent = messages.loginFirstMsg;
-    return;
-  }
+  ifUserIsntLoggedIn();
   if (userLoginInfo) {
     for (let i = 0; i < storedUserInfo.length; i++) {
       if (input.value <= 0) {
@@ -174,10 +183,7 @@ function widthrowMoney() {
 function deleteUserInfo() {
   let check = parsedUsers();
   let updated;
-  if (!userLoginInfo) {
-    printedAmount.textContent = messages.loginFirstMsg;
-    return;
-  }
+  ifUserIsntLoggedIn();
   if (userLoginInfo) {
     for (let i = 0; i < check.length; i++) {
       if (check[i].login == loginInput.value &&
@@ -192,10 +198,7 @@ function deleteUserInfo() {
 
 function transferMoney() {
   let check = parsedUsers();
-  if (!userLoginInfo) {
-    printedAmount.textContent = messages.loginFirstMsg;
-    return;
-  }
+  ifUserIsntLoggedIn();
   if (userLoginInfo) {
     if (transferLoginInput.value <= 0 ||
       transferMoneyInput.value <= 0) {
@@ -204,15 +207,34 @@ function transferMoney() {
     for (let i = 0; i < check.length; i++) {
       if (check[i].login == loginInput.value) {
         check[i].money -= Number(transferMoneyInput.value);
-        updatedLocalStorage(check);
       }
     }
     for (let i = 0; i < check.length; i++) {
       if (check[i].login == transferLoginInput.value) {
         check[i].money += Number(transferMoneyInput.value);
-        updatedLocalStorage(check);
       }
     }
-    printedAmount.textContent = "Money has been transfered";
+    updatedLocalStorage(check);
+    printedAmount.textContent = `Money has been transfered to user ${transferLoginInput.value}`;
+  }
+}
+
+function changedUserName() {
+  let check = parsedUsers();
+
+  ifUserIsntLoggedIn()
+  if (userLoginInfo) {
+    for (let i = 0; i < check.length; i++) {
+      if (check[i].password == passwordInput.value) {
+        if (check[i].login == loginInput.value) {
+          printedAmount.textContent = `Login name is the same.`;
+          return;
+        } else {
+          check[i].login = loginInput.value;
+          printedAmount.textContent = `Your login name has been changed.`
+          updatedLocalStorage(check);
+        }
+      }
+    }
   }
 }
