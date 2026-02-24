@@ -10,6 +10,8 @@ let transferLoginInput = document.getElementById("transfer-to-name");
 let transferMoneyInput = document.getElementById("transfer-money");
 let changeUserName = document.getElementById("change-username");
 
+// TODO: maybe remake using eventListeners? Idk
+
 let userInfo;
 let userLoginInfo = false;
 //repeated text prints
@@ -26,8 +28,20 @@ function formatName(name) {
   let processedLowerLetter;
   let sumLowerLetters = "";
 
+  // TODO: (maybe rework it?) input validation for the input names so it isn't $#%@#$462 
+
   firstUpperCased = input.charAt(0).toUpperCase();
   for (let i = 1; i <= input.length; i++) {
+
+    if (input.charAt(i) <= 40 || input.charAt(i) >= 91
+      || input.charAt(i) <= 96 || input.charAt(i) >= 123) {
+      return;
+    }
+
+    if (input.charAt(i) == " ") {
+      processedLowerLetter = "";
+      sumLowerLetters += processedLowerLetter;
+    }
     processedLowerLetter = input.charAt(i).toLowerCase();
     sumLowerLetters += processedLowerLetter;
   }
@@ -50,6 +64,13 @@ function inputInfo() {
 
   let current;
 
+  if (userInfo.firstName == undefined
+    || userInfo.secondName == undefined
+    || userInfo.login == undefined) {
+    printedAmount.textContent = `Your input has invalid characters. Use letters only`;
+    return;
+  }
+
   if (firstNameInput.value == "" || secondNameInput.value == "" || moneyInput == "" ||
     loginInput.value == "" || passwordInput.value == "") {
     printedAmount.textContent = `One or more fields are empty`;
@@ -63,8 +84,8 @@ function inputInfo() {
         printedAmount.textContent = `User with this login already exists`;
         return;
       }
-      userToLocal(current);
     }
+    userToLocal(current);
   }
 }
 
@@ -205,6 +226,10 @@ function transferMoney() {
       printedAmount.textContent = messages.emptyInputMsg;
     }
     for (let i = 0; i < check.length; i++) {
+      if (check[i].money <= Number(transferMoneyInput.value)) {
+        printedAmount.textContent = `You don't have enough money`;
+        return;
+      }
       if (check[i].login == loginInput.value) {
         check[i].money -= Number(transferMoneyInput.value);
       }
